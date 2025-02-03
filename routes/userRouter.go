@@ -1,13 +1,18 @@
 package routes
 
-import(
-    "github.com/gin-gonic/gin"
-    controller "github.com/DeniChan90/go-dictionary-api/controllers"
-    "github.com/DeniChan90/go-dictionary-api/middleware"
+import (
+	controller "github.com/DeniChan90/go-dictionary-api/controllers"
+	"github.com/DeniChan90/go-dictionary-api/middleware"
+	"github.com/gin-gonic/gin"
 )
 
-func UserRoutes(incomingRoutes *gin.Engine){
-    incomingRoutes.Use(middleware.Authenticate())
-    incomingRoutes.GET("/users", controller.GetUsers())
-    incomingRoutes.GET("/users/:user_id", controller.GetUser())
+func UserRoutes(incomingRoutes *gin.RouterGroup) {
+	userRouter := incomingRoutes.Group("/users")
+	{
+		userRouter.Use(middleware.Authenticate())
+		userRouter.GET("/", controller.GetUsers())
+		userRouter.GET("/:user_id", controller.GetUser())
+		userRouter.POST("/:user_id/settings", controller.CreateUserSettings())
+		userRouter.GET("/:user_id/settings", controller.GetUserSettings())
+	}
 }
