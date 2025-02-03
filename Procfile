@@ -1,2 +1,2 @@
-web: sh -c './go-dictionary-api'
+web: sh -c './bin/go-dictionary-api'
 
