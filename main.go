@@ -8,7 +8,7 @@ import (
 	routes "github.com/DeniChan90/go-dictionary-api/routes"
 	//"github.com/biter777/countries"
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
+	//"github.com/joho/godotenv"
 	"golang.org/x/text/language"
 )
 
@@ -19,11 +19,11 @@ func AddRoutes(routeGroup *gin.RouterGroup) {
 }
 
 func main() {
-	err := godotenv.Load(".env")
+	//err := godotenv.Load(".env")
 
-	if err != nil {
-		log.Fatal("Error with .env file.")
-	}
+	//	if err != nil {
+	//		log.Fatal("Error with .env file.")
+	//	}
 	port := os.Getenv("PORT")
 
 	if port == "" {
