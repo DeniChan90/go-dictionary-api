@@ -9,11 +9,11 @@ import (
 func AuthRoutes(incomingRoutes *gin.RouterGroup) {
 	authRouter := incomingRoutes.Group("/auth")
 	{
+		authRouter.Use(middleware.CORSMiddleware())
 		authRouter.POST("/signup", controller.Signup())
 		authRouter.POST("/login", controller.Login())
 	}
 
-	incomingRoutes.Use(middleware.CORSMiddleware())
 	//incomingRoutes.POST("/auth/signup", controller.Signup())
 	//incomingRoutes.POST("/auth/login", controller.Login())
 }
