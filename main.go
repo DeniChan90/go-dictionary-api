@@ -36,7 +36,7 @@ func main() {
 
 	routerGroup := router.Group("/api")
 
-	router.Use(middleware.CORSMiddleware())
+	routerGroup.Use(middleware.CORSMiddleware())
 
 	AddRoutes(routerGroup)
 
