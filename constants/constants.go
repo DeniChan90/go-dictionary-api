@@ -62,4 +62,44 @@ var Languages = []models.Language{
 		Symbol: countries.Vietnam.Emoji(),
 		Name:   "Vietnamese",
 	},
+	{
+		Code:   language.Kazakh,
+		Symbol: countries.Kazakhstan.Emoji(),
+		Name:   "Kazakh",
+	},
+	{
+		Code:   language.Azerbaijani,
+		Symbol: countries.Azerbaijan.Emoji(),
+		Name:   "Azerbaijan",
+	},
+	{
+		Code:   language.Finnish,
+		Symbol: countries.Finland.Emoji(),
+		Name:   "Finnish",
+	},
+	{
+		Code:   language.Norwegian,
+		Symbol: countries.Norway.Emoji(),
+		Name:   "Norwegian",
+	},
+	{
+		Code:   language.Danish,
+		Symbol: countries.Denmark.Emoji(),
+		Name:   "Danish",
+	},
+	{
+		Code:   language.Lithuanian,
+		Symbol: countries.Lithuania.Emoji(),
+		Name:   "Lithuanian",
+	},
+	{
+		Code:   language.Latvian,
+		Symbol: countries.Latvia.Emoji(),
+		Name:   "Latvian",
+	},
+	{
+		Code:   language.Estonian,
+		Symbol: countries.Estonia.Emoji(),
+		Name:   "Estonian",
+	},
 }
