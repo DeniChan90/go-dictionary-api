@@ -54,7 +54,6 @@ func Translate() gin.HandlerFunc {
 		} else {
 			response := models.TranslateResponse{request.To, translated}
 			log.Print(response)
-			c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 			c.JSON(http.StatusOK, response)
 		}
 	}
@@ -103,6 +102,33 @@ func SaveTranslations() gin.HandlerFunc {
 		defer cancel()
 
 		c.JSON(http.StatusOK, translations)
+
+	}
+}
+
+func DeleteTranslations() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		word_id := c.Param("word_id")
+		user_id := c.Param("user_id")
+
+		_, err := translationsCollection.DeleteMany(ctx, bson.D{{"user_id", user_id}, {"word_id", word_id}})
+
+		if err != nil {
+			log.Panic(err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Delete error"})
+		}
+
+		res, e := wordsCollection.DeleteOne(ctx, bson.D{{"_id", word_id}})
+
+		if e != nil {
+			log.Panic(err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Delete error"})
+		}
+
+		defer cancel()
+
+		c.JSON(http.StatusOK, res)
 
 	}
 }
