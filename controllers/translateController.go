@@ -55,7 +55,7 @@ func Translate() gin.HandlerFunc {
 		} else {
 			response := models.TranslateResponse{request.To, translated.Text, translated.Pronunciation}
 			log.Print(response)
-			c.Header("Access-Control-Allow-Origin", "*")
+			c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 			c.JSON(http.StatusOK, response)
 		}
 	}
