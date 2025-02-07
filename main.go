@@ -1,15 +1,16 @@
 package main
 
 import (
-	"log"
-	"os"
-	"reflect"
+	"context"
 
+	constant "github.com/DeniChan90/go-dictionary-api/constants"
+	"github.com/DeniChan90/go-dictionary-api/middleware"
 	routes "github.com/DeniChan90/go-dictionary-api/routes"
-	//"github.com/biter777/countries"
 	"github.com/gin-gonic/gin"
+	"net/http"
+	"os"
+	"time"
 	//"github.com/joho/godotenv"
-	"golang.org/x/text/language"
 )
 
 func AddRoutes(routeGroup *gin.RouterGroup) {
@@ -33,18 +34,22 @@ func main() {
 	router := gin.New()
 	router.Use(gin.Logger())
 
-	//routes.AuthRoutes(router)
-	//routes.UserRoutes(router)
-
 	routerGroup := router.Group("/api")
+
+	router.Use(middleware.CORSMiddleware())
+
 	AddRoutes(routerGroup)
 
 	router.GET("/api", func(c *gin.Context) {
 		c.JSON(200, gin.H{"success": "API is OK"})
 	})
 
-	//countryUA := countries.Ukraine
+	router.GET("/api/available-languages", func(c *gin.Context) {
+		var _, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 
-	log.Print(">>>", reflect.TypeOf(language.Vietnamese))
+		defer cancel()
+		c.JSON(http.StatusOK, constant.Languages)
+	})
+
 	router.Run(":" + port)
 }

@@ -3,6 +3,7 @@ package controllers
 import (
 	"context"
 	"fmt"
+	//"sync"
 
 	//"io"
 
@@ -14,7 +15,7 @@ import (
 	//	"strconv"
 	"time"
 
-	constant "github.com/DeniChan90/go-dictionary-api/constants"
+	//	constant "github.com/DeniChan90/go-dictionary-api/constants"
 	"github.com/DeniChan90/go-dictionary-api/database"
 
 	//	helper "github.com/DeniChan90/go-dictionary-api/helpers"
@@ -32,15 +33,6 @@ import (
 
 var translationsCollection *mongo.Collection = database.OpenCollection(database.Client, "translations")
 var wordsCollection *mongo.Collection = database.OpenCollection(database.Client, "words")
-
-func GetAvailableLanguages() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		var _, cancel = context.WithTimeout(context.Background(), 100*time.Second)
-
-		defer cancel()
-		c.JSON(http.StatusOK, constant.Languages)
-	}
-}
 
 func Translate() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -61,9 +53,9 @@ func Translate() gin.HandlerFunc {
 		if err != nil {
 			panic(err)
 		} else {
-			response := models.TranslateResponse{request.To, translated.Text}
+			response := models.TranslateResponse{request.To, translated.Text, translated.Pronunciation}
 			log.Print(response)
-			c.JSON(http.StatusOK, translated)
+			c.JSON(http.StatusOK, response)
 		}
 	}
 }
@@ -71,9 +63,7 @@ func Translate() gin.HandlerFunc {
 func SaveTranslations() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
-		//	var translationsRequest []models.TranslateResponse
 		var translations []models.Tranlsation
-		// var translatiosValue []
 		var word models.Word
 
 		word.Word_id = primitive.NewObjectID().Hex()
@@ -114,10 +104,6 @@ func SaveTranslations() gin.HandlerFunc {
 
 		c.JSON(http.StatusOK, translations)
 
-		//fmt.Print("transl...", translations)
-
-		//defer cancel()
-
 	}
 }
 
@@ -127,6 +113,29 @@ func GetUserTanslations() gin.HandlerFunc {
 		lang := c.Query("lang")
 		user_id := c.Param("user_id")
 		translations, err := translationsCollection.Find(ctx, bson.D{{"user_id", user_id}, {"lang", lang}})
+
+		if err != nil {
+			log.Panic(err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "BAD Translation ERROR OCCURED :( "})
+		}
+		defer cancel()
+
+		var translationsValue []bson.M
+
+		if err = translations.All(ctx, &translationsValue); err != nil {
+			log.Fatal(err)
+		}
+
+		c.JSON(http.StatusOK, translationsValue)
+
+	}
+}
+func GetRelatedTanslations() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		word_id := c.Query("word_id")
+		user_id := c.Param("user_id")
+		translations, err := translationsCollection.Find(ctx, bson.D{{"user_id", user_id}, {"word_id", word_id}})
 
 		if err != nil {
 			log.Panic(err)

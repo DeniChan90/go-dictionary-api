@@ -11,8 +11,8 @@ func TranslateRoutes(incomingRoutes *gin.RouterGroup) {
 	{
 		translateRouter.Use(middleware.Authenticate())
 		translateRouter.POST("/", controller.Translate())
-		translateRouter.GET("/languages", controller.GetAvailableLanguages())
 		translateRouter.POST("/:user_id/translations", controller.SaveTranslations())
 		translateRouter.GET("/:user_id/translations", controller.GetUserTanslations())
+		translateRouter.GET("/:user_id/related-translations", controller.GetRelatedTanslations())
 	}
 }
