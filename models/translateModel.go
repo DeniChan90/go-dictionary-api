@@ -18,17 +18,17 @@ type TranslateRequest struct {
 }
 
 type TranslateResponse struct {
-	Lang          string  `bson:"lang,omitempty"`
-	Text          string  `bson:"text,omitempty"`
-	Pronunciation *string `bson:"pronunciation,omitempty"`
+	Lang string `bson:"lang,omitempty"`
+	Text string `bson:"text,omitempty"`
+	//Pronunciation *string `bson:"pronunciation,omitempty"`
 }
 
 type Tranlsation struct {
-	Word_id       string `json:"word_id"`
-	User_id       string `json: "user_id"`
-	Lang          string `json: "lang"`
-	Text          string `json: "text"`
-	Pronunciation string `json:"pronunciation"`
+	Word_id string `json:"word_id"`
+	User_id string `json: "user_id"`
+	Lang    string `json: "lang"`
+	Text    string `json: "text"`
+	// Pronunciation string `json:"pronunciation"`
 }
 
 type Word struct {

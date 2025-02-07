@@ -7,7 +7,7 @@ import (
 
 	//"io"
 
-	gtranslate "github.com/gilang-as/google-translate"
+	//gtranslate "github.com/gilang-as/google-translate"
 
 	"log"
 	"net/http"
@@ -26,6 +26,7 @@ import (
 	//	"golang.org/x/crypto/bcrypt"
 	//"golang.org/x/text/language"
 	// "go.mongodb.org/mongo-driver/bson"
+	gt "github.com/bas24/googletranslatefree"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -46,14 +47,12 @@ func Translate() gin.HandlerFunc {
 
 		defer cancel()
 
-		value := gtranslate.Translate(request)
-
-		translated, err := gtranslate.Translator(value)
+		translated, err := gt.Translate(request.Text, request.From, request.To)
 
 		if err != nil {
-			panic(err)
+			panic(err.Error())
 		} else {
-			response := models.TranslateResponse{request.To, translated.Text, translated.Pronunciation}
+			response := models.TranslateResponse{request.To, translated}
 			log.Print(response)
 			c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 			c.JSON(http.StatusOK, response)

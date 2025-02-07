@@ -12,6 +12,7 @@ require (
 )
 
 require (
+	github.com/bas24/googletranslatefree v0.0.0-20231117033553-f5859fe54d30 // indirect
 	github.com/biter777/countries v1.7.5 // indirect
 	github.com/bytedance/sonic v1.11.6 // indirect
 	github.com/bytedance/sonic/loader v0.1.1 // indirect

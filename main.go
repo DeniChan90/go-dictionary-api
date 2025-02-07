@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	//	"fmt"
-	"log"
+	//"log"
 	"net/http"
 	"os"
 	"time"
@@ -11,7 +11,7 @@ import (
 	constant "github.com/DeniChan90/go-dictionary-api/constants"
 	"github.com/DeniChan90/go-dictionary-api/middleware"
 	routes "github.com/DeniChan90/go-dictionary-api/routes"
-	gtranslate "github.com/gilang-as/google-translate"
+	//gtranslate "github.com/gilang-as/google-translate"
 	"github.com/gin-gonic/gin"
 	//"github.com/joho/godotenv"
 )
@@ -54,21 +54,6 @@ func main() {
 		c.JSON(http.StatusOK, constant.Languages)
 	})
 
-	value := gtranslate.Translate{
-		Text: "Hello",
-		From: "en",
-		To:   "uk",
-	}
-	translated, err := gtranslate.Translator(value)
-	if err != nil {
-		panic(err)
-	} else {
-		//prettyJSON, err := json.MarshalIndent(translated, "", "\t")
-		if err != nil {
-			panic(err)
-		}
-		log.Print("Test log >>>>", translated)
-	}
 	router.Run(":" + port)
 
 }
