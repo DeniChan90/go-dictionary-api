@@ -9,8 +9,8 @@ import (
 func TranslateRoutes(incomingRoutes *gin.RouterGroup) {
 	translateRouter := incomingRoutes.Group("/translate")
 	{
-		translateRouter.Use(middleware.Authenticate())
 		translateRouter.Use(middleware.CORSMiddleware())
+		translateRouter.Use(middleware.Authenticate())
 		translateRouter.POST("/", controller.Translate())
 		translateRouter.POST("/:user_id/translations", controller.SaveTranslations())
 		translateRouter.GET("/:user_id/translations", controller.GetUserTanslations())
