@@ -13,7 +13,7 @@ func AuthRoutes(incomingRoutes *gin.RouterGroup) {
 		authRouter.POST("/login", controller.Login())
 	}
 
-	authRouter.Use(middleware.CORSMiddleware())
+	incomingRoutes.Use(middleware.CORSMiddleware())
 	//incomingRoutes.POST("/auth/signup", controller.Signup())
 	//incomingRoutes.POST("/auth/login", controller.Login())
 }
