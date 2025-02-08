@@ -70,7 +70,8 @@ func Signup() gin.HandlerFunc {
 
 		if err != nil {
 			log.Panic(err)
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "BAD ERROR OCCURED :( "})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "User already exist"})
+			return
 		}
 
 		password := HashPassword(*user.Password)
@@ -78,6 +79,8 @@ func Signup() gin.HandlerFunc {
 
 		if count > 1 {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "User with this email already exists"})
+			defer cancel()
+			return
 		}
 
 		user.Created_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))

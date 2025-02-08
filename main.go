@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"flag"
+
 	//	"fmt"
 	//"log"
 	"net/http"
@@ -10,11 +12,16 @@ import (
 
 	constant "github.com/DeniChan90/go-dictionary-api/constants"
 	"github.com/DeniChan90/go-dictionary-api/middleware"
+	onlineWs "github.com/DeniChan90/go-dictionary-api/online-socket"
 	routes "github.com/DeniChan90/go-dictionary-api/routes"
+	chatWs "github.com/DeniChan90/go-dictionary-api/web-socket"
+
 	//gtranslate "github.com/gilang-as/google-translate"
 	"github.com/gin-gonic/gin"
 	//"github.com/joho/godotenv"
 )
+
+var addr = flag.String("addr", ":8080", "http service address")
 
 func AddRoutes(routeGroup *gin.RouterGroup) {
 	routes.AuthRoutes(routeGroup)
@@ -28,6 +35,14 @@ func main() {
 	//	if err != nil {
 	//		log.Fatal("Error with .env file.")
 	//	}
+
+	flag.Parse()
+	chatHub := chatWs.NewHub()
+	onlineHub := onlineWs.NewHub()
+
+	go chatHub.Run()
+	go onlineHub.Run()
+
 	port := os.Getenv("PORT")
 
 	if port == "" {
@@ -52,6 +67,14 @@ func main() {
 
 		defer cancel()
 		c.JSON(http.StatusOK, constant.Languages)
+	})
+
+	router.GET("/chat", func(c *gin.Context) {
+		chatWs.ServeWs(chatHub, c.Writer, c.Request)
+	})
+
+	router.GET("/online", func(c *gin.Context) {
+		onlineWs.ServeWs(onlineHub, c.Writer, c.Request)
 	})
 
 	router.Run(":" + port)
